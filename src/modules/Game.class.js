@@ -1,6 +1,6 @@
 'use strict';
 
-export default class Game {
+class Game {
   constructor(initialState) {
     this.size = 4;
     this.score = 0;
@@ -170,3 +170,5 @@ export default class Game {
     }
   }
 }
+
+module.exports = Game;
