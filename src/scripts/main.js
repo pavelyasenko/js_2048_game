@@ -3,11 +3,15 @@
 const Game = require('../modules/Game.class');
 const game = new Game();
 
-const startButon = document.querySelector('.start');
+const startButton = document.querySelector('.start');
+const messageStart = document.querySelector('.message-start');
 
-startButon.addEventListener('click', () => {
-  // eslint-disable-next-line no-undef
+startButton.addEventListener('click', () => {
   game.start();
+  messageStart.classList.add('hidden');
+  startButton.classList.remove('start');
+  startButton.classList.add('restart');
+  startButton.textContent = 'Restart';
 });
 
 document.addEventListener('keydown', (eventt) => {

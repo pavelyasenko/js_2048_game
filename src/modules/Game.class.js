@@ -29,7 +29,7 @@ class Game {
       for (let c = 0; c < this.size; c++) {
         // c =colums
         if (this.board[r][c] === 0) {
-          empty.push([r][c]); // random cordinat
+          empty.push([r, c]); // random cordinat
         }
       }
     }
@@ -40,6 +40,8 @@ class Game {
 
       this.board[r][c] = Math.random() < 0.9 ? 2 : 4; // push 2 90% push 4 10%
     }
+
+    return empty;
   }
 
   slide(row) {
@@ -64,28 +66,24 @@ class Game {
     return arr;
   }
 
-  rotateCounterClockwise(matrix) {
+  rotateClockwise(matrix) {
     const result = this.createCleanBord();
 
     for (let r = 0; r < this.size; r++) {
-      // r = rows
       for (let c = 0; c < this.size; c++) {
-        // c =colums
-        result[c][this.size - 1 - r] = matrix[c][r];
+        result[c][this.size - 1 - r] = matrix[r][c];
       }
     }
 
     return result;
   }
 
-  rotateClockwise(matrix) {
-    const result = this._createEmptyBoard();
+  rotateCounterClockwise(matrix) {
+    const result = this.createCleanBord();
 
     for (let r = 0; r < this.size; r++) {
-      // r = rows
       for (let c = 0; c < this.size; c++) {
-        // c =colums
-        result[c][this.size - 1 - r] = matrix[r][c];
+        result[this.size - 1 - c][r] = matrix[r][c];
       }
     }
 
@@ -152,10 +150,8 @@ class Game {
     if (this.status === 'idle') {
       this.status = 'playing';
 
-      if (this.board.includes(0)) {
-        this.generateRandomElement();
-        this.generateRandomElement();
-      }
+      this.generateRandomElement();
+      this.generateRandomElement();
     }
   }
 
@@ -163,7 +159,7 @@ class Game {
    * Resets the game.
    */
   restart() {
-    this.board = this._createEmptyBoard();
+    this.board = this.createCleanBord();
     this.score = 0;
     this.status = 'idle';
   }
