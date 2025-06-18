@@ -1,5 +1,4 @@
 'use strict';
-
 class Game {
   constructor(initialState) {
     this.size = 4;
@@ -27,7 +26,7 @@ class Game {
       for (let c = 0; c < this.size; c++) {
         // c =colums
         if (this.board[r][c] === 0) {
-          empty.push([r][c]); // random cordinat
+          empty.push([r, c]); // random cordinat
         }
       }
     }
@@ -38,6 +37,8 @@ class Game {
 
       this.board[r][c] = Math.random() < 0.9 ? 2 : 4; // push 2 90% push 4 10%
     }
+
+    return empty;
   }
   slide(row) {
     // work onli on left
@@ -52,34 +53,29 @@ class Game {
     }
     arr = arr.filter((val) => val !== 0);
 
-    if (arr.length < this.size) {
-      // eslint-disable-next-line no-unused-expressions
-      arr.push[0]; // add 0 in row
+    while (arr.length < this.size) {
+      arr.push(0);
     }
 
     return arr;
-  }
-  rotateCounterClockwise(matrix) {
-    const result = this.createCleanBord();
-
-    for (let r = 0; r < this.size; r++) {
-      // r = rows
-      for (let c = 0; c < this.size; c++) {
-        // c =colums
-        result[c][this.size - 1 - r] = matrix[c][r];
-      }
-    }
-
-    return result;
   }
   rotateClockwise(matrix) {
     const result = this.createCleanBord();
 
     for (let r = 0; r < this.size; r++) {
-      // r = rows
       for (let c = 0; c < this.size; c++) {
-        // c =colums
         result[c][this.size - 1 - r] = matrix[r][c];
+      }
+    }
+
+    return result;
+  }
+  rotateCounterClockwise(matrix) {
+    const result = this.createCleanBord();
+
+    for (let r = 0; r < this.size; r++) {
+      for (let c = 0; c < this.size; c++) {
+        result[this.size - 1 - c][r] = matrix[r][c];
       }
     }
 
@@ -88,22 +84,26 @@ class Game {
   moveLeft() {
     this.board = this.board.map((row) => this.slide(row));
     this.generateRandomElement();
+    this.updateStatus();
   }
   moveRight() {
     this.board = this.board.map((row) => this.slide(row.reverse()).reverse());
     this.generateRandomElement();
+    this.updateStatus();
   }
   moveUp() {
-    this.board = this.board.rotateClockwise();
+    this.board = this.rotateClockwise(this.board);
     this.board = this.board.map((row) => this.slide(row));
-    this.board = this.board.rotateCounterClockwise();
+    this.board = this.rotateCounterClockwise(this.board);
     this.generateRandomElement();
+    this.updateStatus();
   }
   moveDown() {
     this.board = this.rotateClockwise(this.board);
     this.board = this.board.map((row) => this.slide(row));
     this.board = this.rotateCounterClockwise(this.board);
     this.generateRandomElement();
+    this.updateStatus();
   }
   /**
    * @returns {number}
@@ -136,7 +136,6 @@ class Game {
   start() {
     if (this.status === 'idle') {
       this.status = 'playing';
-
       this.generateRandomElement();
       this.generateRandomElement();
     }
@@ -149,11 +148,31 @@ class Game {
     this.score = 0;
     this.status = 'idle';
   }
-  _updateStatus() {
+  updateStatus() {
     if (this.board.flat().includes(2048)) {
       this.status = 'win';
+      // eslint-disable-next-line no-undef
+    } else if (this.isGameOver()) {
+      this.status = 'lose';
     }
   }
-}
+  isGameOver() {
+    for (let r = 0; r < this.size; r++) {
+      for (let c = 0; c < this.size; c++) {
+        if (this.board[r][c] === 0) {
+          return false;
+        }
 
+        if (
+          (c < this.size - 1 && this.board[r][c] === this.board[r][c + 1]) ||
+          (r < this.size - 1 && this.board[r][c] === this.board[r + 1][c])
+        ) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+}
 module.exports = Game;
