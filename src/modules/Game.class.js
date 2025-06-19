@@ -81,28 +81,58 @@ class Game {
     return result;
   }
   moveLeft() {
-    this.board = this.board.map((row) => this.slide(row));
-    this.generateRandomElement();
-    this.updateStatus();
+    const oldBoard = this.getState();
+    const newBoard = this.board.map((row) => this.slide(row));
+
+    if (!this.boardsAreEqual(oldBoard, newBoard)) {
+      this.board = newBoard;
+      this.generateRandomElement();
+      this.updateStatus();
+    }
   }
+
   moveRight() {
-    this.board = this.board.map((row) => this.slide(row.reverse()).reverse());
-    this.generateRandomElement();
-    this.updateStatus();
+    const oldBoard = this.getState();
+    const newBoard = this.board.map(
+      (row) => this.slide([...row].reverse()).reverse(),
+      // eslint-disable-next-line function-paren-newline
+    );
+
+    if (!this.boardsAreEqual(oldBoard, newBoard)) {
+      this.board = newBoard;
+      this.generateRandomElement();
+      this.updateStatus();
+    }
   }
+
   moveUp() {
-    this.board = this.rotateCounterClockwise(this.board);
-    this.board = this.board.map((row) => this.slide(row));
-    this.board = this.rotateClockwise(this.board);
-    this.generateRandomElement();
-    this.updateStatus();
+    const oldBoard = this.getState();
+    let rotated = this.rotateCounterClockwise(this.board);
+
+    rotated = rotated.map((row) => this.slide(row));
+
+    const newBoard = this.rotateClockwise(rotated);
+
+    if (!this.boardsAreEqual(oldBoard, newBoard)) {
+      this.board = newBoard;
+      this.generateRandomElement();
+      this.updateStatus();
+    }
   }
+
   moveDown() {
-    this.board = this.rotateClockwise(this.board);
-    this.board = this.board.map((row) => this.slide(row));
-    this.board = this.rotateCounterClockwise(this.board);
-    this.generateRandomElement();
-    this.updateStatus();
+    const oldBoard = this.getState();
+    let rotated = this.rotateClockwise(this.board);
+
+    rotated = rotated.map((row) => this.slide(row));
+
+    const newBoard = this.rotateCounterClockwise(rotated);
+
+    if (!this.boardsAreEqual(oldBoard, newBoard)) {
+      this.board = newBoard;
+      this.generateRandomElement();
+      this.updateStatus();
+    }
   }
   /**
    * @returns {number}
@@ -166,6 +196,18 @@ class Game {
           (c < this.size - 1 && this.board[r][c] === this.board[r][c + 1]) ||
           (r < this.size - 1 && this.board[r][c] === this.board[r + 1][c])
         ) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  boardsAreEqual(board1, board2) {
+    for (let r = 0; r < this.size; r++) {
+      for (let c = 0; c < this.size; c++) {
+        if (board1[r][c] !== board2[r][c]) {
           return false;
         }
       }

@@ -47,11 +47,13 @@ startButton.addEventListener('click', () => {
     game.getStatus() === 'win'
   ) {
     game.restart();
-    game.start();
     startButton.classList.remove('restart');
     startButton.classList.add('start');
     startButton.textContent = 'Start';
     updateBoard();
+    messageStart.classList.add('hidden');
+    messageWin.classList.add('hidden');
+    messageLose.classList.add('hidden');
   }
 });
 
