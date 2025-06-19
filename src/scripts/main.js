@@ -6,6 +6,8 @@ const startButton = document.querySelector('.start');
 const messageStart = document.querySelector('.message-start');
 const gameScore = document.querySelector('.game-score');
 const cells = document.querySelectorAll('.field-cell');
+const messageLose = document.querySelector('.message-lose');
+const messageWin = document.querySelector('.message-win');
 
 function updateBoard() {
   const state = game.getState();
@@ -24,14 +26,12 @@ function updateBoard() {
   });
   gameScore.textContent = game.getScore();
 
-  if (game.getStatus() === 'lose') {
-    messageStart.textContent = 'Game over! Press Restart to try again.';
-    messageStart.classList.remove('hidden');
-  }
-
   if (game.getStatus() === 'win') {
-    messageStart.textContent = 'You win! Press Restart to play again.';
+    messageStart.textContent = messageWin.textContent;
+    messageStart.classList.add('message-win');
     messageStart.classList.remove('hidden');
+  } else if (game.getStatus() === 'lose') {
+    messageLose.classList.remove('hidden');
   }
 }
 
@@ -42,6 +42,7 @@ startButton.addEventListener('click', () => {
     startButton.textContent = 'Restart';
     startButton.classList.remove('start');
     startButton.classList.add('restart');
+    updateBoard();
   } else if (
     game.getStatus() === 'playing' ||
     game.getStatus() === 'lose' ||
