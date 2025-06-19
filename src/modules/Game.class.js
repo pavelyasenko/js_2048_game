@@ -92,9 +92,9 @@ class Game {
     this.updateStatus();
   }
   moveUp() {
-    this.board = this.rotateClockwise(this.board);
-    this.board = this.board.map((row) => this.slide(row));
     this.board = this.rotateCounterClockwise(this.board);
+    this.board = this.board.map((row) => this.slide(row));
+    this.board = this.rotateClockwise(this.board);
     this.generateRandomElement();
     this.updateStatus();
   }
