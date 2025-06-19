@@ -86,6 +86,7 @@ class Game {
     this.generateRandomElement();
     this.updateStatus();
   }
+
   moveRight() {
     this.board = this.board.map((row) => this.slide(row.reverse()).reverse());
     this.generateRandomElement();
