@@ -27,9 +27,7 @@ function updateBoard() {
   gameScore.textContent = game.getScore();
 
   if (game.getStatus() === 'win') {
-    messageStart.textContent = messageWin.textContent;
-    messageStart.classList.add('message-win');
-    messageStart.classList.remove('hidden');
+    messageWin.classList.remove('hidden');
   } else if (game.getStatus() === 'lose') {
     messageLose.classList.remove('hidden');
   }
