@@ -32,7 +32,6 @@ class Game {
     }
 
     if (empty.length > 0) {
-      // take random rows and colum for push in next steap
       const [r, c] = empty[Math.floor(Math.random() * empty.length)];
 
       this.board[r][c] = Math.random() < 0.9 ? 2 : 4; // push 2 90% push 4 10%
