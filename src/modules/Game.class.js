@@ -22,11 +22,9 @@ class Game {
     const empty = [];
 
     for (let r = 0; r < this.size; r++) {
-      // r = rows
       for (let c = 0; c < this.size; c++) {
-        // c =colums
         if (this.board[r][c] === 0) {
-          empty.push([r, c]); // random cordinat
+          empty.push([r, c]);
         }
       }
     }
@@ -34,13 +32,12 @@ class Game {
     if (empty.length > 0) {
       const [r, c] = empty[Math.floor(Math.random() * empty.length)];
 
-      this.board[r][c] = Math.random() < 0.9 ? 2 : 4; // push 2 90% push 4 10%
+      this.board[r][c] = Math.random() < 0.9 ? 2 : 4;
     }
 
     return empty;
   }
   slide(row) {
-    // work onli on left
     let arr = row.filter((val) => val !== 0);
 
     for (let i = 0; i < arr.length; i++) {
@@ -180,7 +177,6 @@ class Game {
   updateStatus() {
     if (this.board.flat().includes(2048)) {
       this.status = 'win';
-      // eslint-disable-next-line no-undef
     } else if (this.isGameOver()) {
       this.status = 'lose';
     }
